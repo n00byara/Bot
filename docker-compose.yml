@@ -1,9 +1,25 @@
+version: '3'
+
 services:
   bot:
     build: ./bot
     container_name: bot
     volumes:
       - ./bot/src:/usr/app
+      - ./configuration:/usr/app/configuration
+      - ./db:/usr/app/db
+    depends_on:
+      - db
+
+  miniapp:
+    build: ./miniapp
+    container_name: miniapp
+    volumes:
+      - ./miniapp/src:/usr/app
+      - ./configuration:/usr/app/configuration
+      - ./db:/usr/app/db
+    ports:
+      - 3000:3000
     depends_on:
       - db
 
@@ -12,14 +28,11 @@ services:
     restart: always
     container_name: data_base
     env_file:
-      - ./bot/src/configuration/.env
+      - ./configuration/.env
     ports:
       - 5432:5432
-
+volumes:
+  bot:
   miniapp:
-    build: ./miniapp
-    container_name: miniapp
-    volumes:
-      - ./miniapp/src:/usr/app
-    ports:
-      - 3000:3000
+  configuration:
+  db:

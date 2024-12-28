@@ -42,8 +42,16 @@ class DB:
         query = """
             CREATE TABLE users (
                 id SERIAL PRIMARY KEY,
-                username TEXT NOT NULL,
+                username TEXT NOT NULL
             );
+        """
+
+        self.__insert_query(query)
+
+    def add_user(self, username):
+        query = f"""
+            INSERT INTO "users" ("username")
+            VALUES ('{username}')
         """
 
         self.__insert_query(query)
@@ -54,9 +62,13 @@ class DB:
                 *
             FROM
                 "users" AS "us"
-            WHERE "us"."username" = {username}
+            WHERE "us"."username" = '{username}'
         """
 
+        return self.__get_result_from_query(query)
+    
+    def get_users(self):
+        query = "SELECT * FROM \"users\""
         return self.__get_result_from_query(query)
 
 db = DB()
