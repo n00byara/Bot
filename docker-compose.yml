@@ -1,0 +1,25 @@
+services:
+  bot:
+    build: ./bot
+    container_name: bot
+    volumes:
+      - ./bot/src:/usr/app
+    depends_on:
+      - db
+
+  db:
+    image: postgres:14.3
+    restart: always
+    container_name: data_base
+    env_file:
+      - ./bot/src/configuration/.env
+    ports:
+      - 5432:5432
+
+  miniapp:
+    build: ./miniapp
+    container_name: miniapp
+    volumes:
+      - ./miniapp/src:/usr/app
+    ports:
+      - 3000:3000
