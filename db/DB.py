@@ -1,9 +1,11 @@
 import psycopg2
+
 from configuration.Config import Config
+from singleton.Singleton import Singleton
 
 pg_config = Config().postgres
 
-class DB:
+class DB(Singleton):
     def __get_result_from_query(self, sql):
         conn = psycopg2.connect(
             dbname=pg_config.database,
@@ -68,7 +70,15 @@ class DB:
         return self.__get_result_from_query(query)
     
     def get_users(self):
+        result = list()
         query = "SELECT * FROM \"users\""
-        return self.__get_result_from_query(query)
 
-db = DB()
+        users = self.__get_result_from_query(query)
+
+        for id, username in users:
+             result.append({
+                  "id": id,
+                  "username": username
+             })
+        
+        return result
