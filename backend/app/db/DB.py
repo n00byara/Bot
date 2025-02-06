@@ -1,11 +1,10 @@
 import psycopg2
 
-from configuration.Config import Config
-from singleton.Singleton import Singleton
+from configuration import config
 
-pg_config = Config().postgres
+pg_config = config.postgres
 
-class DB(Singleton):
+class DB:
     def __get_result_from_query(self, sql):
         conn = psycopg2.connect(
             dbname=pg_config.database,

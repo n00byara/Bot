@@ -2,11 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from uvicorn import run
 
-from configuration.Config import Config
-from db.DB import DB
+from configuration import config
+from db import db
 
-config = Config()
-db = DB()
 app = FastAPI()
 
 origins = ["*"]

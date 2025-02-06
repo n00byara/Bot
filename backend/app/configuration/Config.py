@@ -1,12 +1,14 @@
 import os
 from dotenv import load_dotenv
 
-from configuration.СhangeError import СhangeError
-from singleton.Singleton import Singleton
+from configuration import СhangeError
 
-load_dotenv()
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-class Config(Singleton):
+dotenv_path = os.path.join(f"{BASE_DIR}/config", ".env")
+load_dotenv(dotenv_path)
+
+class Config:
     class _Postgres:
         username: str = None
         userpassword: str = None
@@ -62,7 +64,6 @@ class Config(Singleton):
             raise СhangeError()
         
     debug: str = None
-    token: str = None
     host: str = None
     port: int = None
     log_level: str = None
@@ -70,9 +71,8 @@ class Config(Singleton):
 
     def __init__(self):
         self._debug = os.getenv("DEBUG")
-        self._token = os.getenv("TOKEN")
-        self._host = os.getenv("HOST_BACK")
-        self._port = int(os.getenv("PORT_BACK"))
+        self._host = os.getenv("HOST")
+        self._port = int(os.getenv("PORT"))
         self._log_level = "debug" if self.debug else "info"
         self._postgres = self._Postgres()
 
@@ -82,14 +82,6 @@ class Config(Singleton):
     
     @debug.setter
     def debug(self, value):
-        raise СhangeError()
-    
-    @property
-    def token(self):
-        return self._token
-    
-    @token.setter
-    def token(self, value):
         raise СhangeError()
     
     @property

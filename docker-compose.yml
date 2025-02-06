@@ -5,49 +5,29 @@ services:
     build: ./bot
     container_name: bot
     volumes:
-      - ./bot/src:/usr/app
-      - ./singleton:/usr/app/singleton
-      - ./configuration:/usr/app/configuration
-      - ./db:/usr/app/db
-    depends_on:
-      - db
+      - ./bot/app:/usr/app
+      - ./config/:/usr/app/configuration/config
 
-  miniapp_backend:
-    build: ./miniapp_backend
-    container_name: miniapp_backend
+  backend:
+    build: ./backend
+    container_name: backend
     volumes:
-      - ./miniapp_backend/src:/usr/app
-      - ./singleton:/usr/app/singleton
-      - ./configuration:/usr/app/configuration
-      - ./db:/usr/app/db
+      - ./backend/app:/usr/app
+      - ./config/:/usr/app/configuration/config
     ports:
       - 3000:3000
     depends_on:
-      - db
+      - database
 
-  miniapp_frontend:
-    build: ./miniapp_frontend
-    container_name: miniapp_frontend
-    command: sh -c "npm install && npm run dev"
-    volumes:
-      - ./miniapp_frontend/vue-app:/usr/app
-    ports:
-      - 8000:8000
-    depends_on:
-      - miniapp_backend
-
-  db:
+  database:
     image: postgres:14.3
     restart: always
-    container_name: data_base
+    container_name: database
     env_file:
-      - ./configuration/.env
+      - ./config/.env
     ports:
       - 5432:5432
+
 volumes:
-  bot:
-  miniapp_backend:
-  miniapp_frontend:
-  singleton:
-  configuration:
-  db:
+  backend:
+  config:
